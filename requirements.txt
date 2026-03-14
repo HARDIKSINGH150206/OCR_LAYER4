@@ -1,0 +1,8 @@
+fastapi>=0.110.0
+uvicorn>=0.29.0
+python-multipart>=0.0.9
+numpy>=1.24.0
+opencv-python>=4.8.0
+easyocr>=1.7.1
+ultralytics>=8.2.0
+paddleocr>=2.7.0
