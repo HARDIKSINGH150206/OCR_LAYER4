@@ -201,11 +201,12 @@ def analyze_image_with_yolo(image_path):
                     precision = 35.0  # MANIPULATED - AI detected
                 else:
                     # No detections but natural image characteristics
-                    # Benefit of doubt - just can't detect expiry region
-                    precision = 88.0  # SUSPICIOUS - weak image
+                    # Original image - just can't detect expiry region (e.g., not visible)
+                    # GENUINE unless proven otherwise
+                    precision = 93.0  # LIKELY GENUINE - natural image
             else:
                 # Regions exist at lower confidence - it's a real image with weak regions
-                precision = 88.0  # SUSPICIOUS - low quality but genuine
+                precision = 91.0  # LIKELY GENUINE - low quality but genuine, detectable at lower confidence
         elif detected_count >= 3:
             # Multiple regions strongly detected - very confident genuine
             avg_conf = np.mean(confidence_scores)
