@@ -338,23 +338,15 @@ class OCRVerificationModule:
             if parsed is not None:
                 found_dates.append(parsed)
 
-        for match in re.finditer(r"\b(\d{4})[\/\.\-](\d{1,2})[\/\.\-](\d{1,2})\b", normalized):
-            year = int(match.group(1))
-            month = int(match.group(2))
-            day = int(match.group(3))
-            parsed = self._safe_date(year, month, day)
-            if parsed is not None:
-                found_dates.append(parsed)
-
-        for match in re.finditer(r"(?<!\d[\/\.\-])\b(\d{1,2})[\/\.\-](\d{2,4})\b(?![\/\.\-]\d)", normalized):
+        for match in re.finditer(r"\b(\d{1,2})[\/.\-](\d{4})\b", normalized):
             month = int(match.group(1))
-            year = self._normalize_year(int(match.group(2)))
+            year = int(match.group(2))
             parsed = self._safe_date(year, month, 1)
             if parsed is not None:
                 found_dates.append(parsed)
 
         for match in re.finditer(
-            r"\b(?:(\d{1,2})[\s\-\/,\.]+)?(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|SEPT|OCT|NOV|DEC)[A-Z]*[\s\-\/,\.]*([0-9]{2,4})\b",
+            r"\b(?:(\d{1,2})\s+)?(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|SEPT|OCT|NOV|DEC)[A-Z]*[\s\-\/,\.]*([0-9]{2,4})\b",
             normalized,
         ):
             day = int(match.group(1)) if match.group(1) else 1
@@ -531,10 +523,7 @@ class OCRVerificationModule:
             except ValueError:
                 continue
 
-        for iso_candidate in (candidate, normalized):
-            try:
-                return datetime.fromisoformat(iso_candidate).date()
-            except ValueError:
-                continue
-
-        return None
+        try:
+            return datetime.fromisoformat(candidate).date()
+        except ValueError:
+            return None

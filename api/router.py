@@ -23,7 +23,10 @@ _detector: OCRVerificationModule | None = None
 def get_detector() -> OCRVerificationModule:
     global _detector
     if _detector is None:
-        _detector = OCRVerificationModule()
+        # Use the fine-tuned model
+        model_path = str(Path(__file__).parent.parent / "models/yolo_finetune/layer4_expiry_region_95precision_fast2/weights/best.pt")
+        LOGGER.info(f"Loading model from: {model_path}")
+        _detector = OCRVerificationModule(text_detector_model=model_path)
     return _detector
 
 
